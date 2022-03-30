@@ -9,17 +9,17 @@ csvファイルを任意のティラノ変数へ格納するプラグインで�
 ## 使い方
 1. `csv_test` フォルダを `data/other/pluin/` へ入れる
 2. `[plugin name="csv_test"]`
-3. `[mc_loadcsv file=sample.csv varname="tf.s.test" overwrite=yes format=ObjectO spilit="_EOF" br=""]`
+3. `[mc_loadcsv file=sample.csv varname="tf.s.test" overwrite=yes format=ObjectO split="_EOF" br=""]`
 
 ## パラメーター
 
 | 属性名 | 説明 |
 ----|---- 
 | file |  csvファイル名 |
-| varname | 保存先変数名（f.hofe など）|
+| varname | 保存先変数名（f.hofe など） exp の方が解りやすいかな？ |
 | format | 配列パターン（array/arrayA/arrayO/object/objectA/objectO) |
-| split | 分割キーを指定　※指定が無ければ改行コードで分割 |
-| br | 改行コードを任意の文字列へ変換　※split指定必須 |
+| split | 分割キー（文字列： "_eof_" など）　※指定が無ければ改行コードで分割 |
+| br | 改行コードを変換する（文字列：<br> など）　※split指定必須 |
 
 ## format について
 ### array
@@ -28,28 +28,30 @@ csvファイルを任意のティラノ変数へ格納するプラグインで�
 
 ### arrayA
 配列-配列  
-行ごとに入れ子の配列になります。
-```[[a-1,a-2,a-3],[b-1,b-2,b-3],...]```
+行ごとに入れ子の配列になります。  
+```[[A1,B1,C1],[A2,B2,C3],...]```
 
 ### arrayO
 配列-連想配列  
 行ごとに、連想配列を入れて行きます。1行目がkeyになります（TIPプラグインと同じ）  
-```[{a-1:b-1,a-2:b-2,a-3:b-3},{a-1:c-1,a-2:c-2,a-3:c-3},...]```
+```[{A1:A2,B1:B2,C1:C2},{A1:A3,B1:B3,C1:C3},...]```
 
 ### object
 連想配列  
 1行目に key と value が必須になります。その他の項目は、あっても無視されます。  
-```{b-1:b-2,c-1:c-2,d-1:d-2,...}```
+```{A2:B2,A3:B3,A4:B4,...}```  
+※a-1=key、a-2=value の場合
 
 ### objectA
 連想配列-配列  
 1行目に key 必須。これ、どやって使うのかわからんです・・・  
-```{b-1:[b-2,b-3,b-4....],c-1:[c-2,c-3,c-4,...],...}```  
+```{A2:[B2,C2,D2....],A3:[B3,C3,D3,...],...}```  
 ※a-1=key の場合
 
 ### objectO
 連想配列-連想配列  
-```{{a-1:b-1,a-2:b-2,a-3:b-3,...},{a-1:c-1,a-2:c-2,a-3:c-3,...},...}```  
+```{A2:{B1:B2,C1:C2,D1:D2,...},A3:{B1:B3,C1:C3,D1:D3,...},...}```  
+※a-1=key の場合
 
 ## セル内で改行コードを使いたい場合
 1. csvファイルの最後のセルに分割用のキー（何でもいいけど本文と被らないように）を入れる。
