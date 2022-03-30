@@ -50,7 +50,7 @@ function getData(data,pm){
 	const tf = TYRANO.kag.variable.tf;
 	eval(pm.varname+'=newData');
 
-	console.log(pm.format+'＋'+pm.varname,TYRANO.kag.embScript(pm.varname));
+	//console.log(pm.format+'＋'+pm.varname,TYRANO.kag.embScript(pm.varname));
 
 }
 //ファイル呼び出し
@@ -84,7 +84,7 @@ function getData2(pm){
 		const tf = TYRANO.kag.variable.tf;
 		eval(pm.varname+"=newData");
 
-		console.log(pm.format+"＋"+pm.varname,TYRANO.kag.embScript(pm.varname));
+		//console.log(pm.format+"＋"+pm.varname,TYRANO.kag.embScript(pm.varname));
 
 	})
 	.fail(function(data) {
