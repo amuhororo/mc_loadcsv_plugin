@@ -11,7 +11,10 @@ csvファイルを任意のティラノ変数へ格納するプラグインで�
 ## パラメーター
 ※変更の可能性あり
 
+| TH1 | TH2 |
 ----|---- 
+| TD1 | TD3 |
+| TD2 | TD4 |
 | file |  csvファイル名 |
 | varname | 保存先変数名（f.hofe など）|
 | format | 配列パターン（array/arrayA/arrayO/object/objectA/objectO) |
