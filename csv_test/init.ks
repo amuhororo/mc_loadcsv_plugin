@@ -1,7 +1,7 @@
 [loadjs storage="plugin/csv_test/main.js"]
 
 
-[macro name="loadcsv"]
+[macro name="mc_loadcsv"]
 	[iscript]
 		mcLoadcsv(mp);
 	[endscript]
