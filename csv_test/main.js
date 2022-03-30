@@ -31,16 +31,18 @@ function mcLoadcsv(pm) {
 	}
 };
 
+//ファイル呼び出し
 function getData(data,pm){
 	pm.br = pm.br || "";
-	const br = !pm.br ? '\n' : pm.br;  //改行
+	let br = !pm.br ? '\n' : pm.br;  //改行
 	const split = pm.split ? pm.split : br;  //分割キー
-	//フォーマット
-	const format = pm.format ? pm.format.replace(/array/i, 'Array').replace(/object/i, 'Object') : 'ArrayA';
+	const format = pm.format ? pm.format.toLowerCase().replace(/^a|a$/ig,'A').replace(/^o|o$/ig,'O') : 'ArrayA'; //フォーマット
+	const xbr = "_&&&_";  //改行代替え用
+	//console.log(format,pm.format);
 
 	//データの下準備
-	data = data.replace(/\r?\n/g, br).replace(/\\n/g,'&&&&&');  //改行を置換/改行記号を適当な文字列に置換 &&&&&使う人いたら困る。
-	data = data.replace(new RegExp('&&&&&'+br,'g'),'&&&&&');  //代替え文字列に隣接した改行を削除
+	data = data.replace(/\r?\n/g, br).replace(/\\n/g,xbr);  //改行を置換/改行記号を適当な文字列に置換 &&&&&使う人いたら困る。
+	data = data.replace(new RegExp(xbr+br,'g'),xbr);  //代替え文字列に隣接した改行を削除
 	if(pm.split){
 		data = data.replace(new RegExp(','+pm.split+br,'g'), pm.split);  //分割キー前のコンマと後の改行はいらない
 		if(pm.br == '') data = data.replace(/\n/g, '');  //改行削除
@@ -48,61 +50,22 @@ function getData(data,pm){
 	data = data.split(split);   //分割して配列にする
 	data = $.grep(data, function(e){return e;});    //空行削除
 	//改行の代替え記号を改行コードに戻す。他にやりようないのか・・・。
-	data = data.map(elem => elem.replace(new RegExp('&&&&&'+pm.br,'g'), '\n'));
+	br = pm.split ? pm.br : "";
+	data = data.map(elem => elem.replace(new RegExp(xbr+br,'g'), '\n'));
 
 	//データを変換
 	const newData = mcfn['csv'+format](data);
+
 	//ティラノの変数に格納
 	const f = TYRANO.kag.stat.f;
 	const sf = TYRANO.kag.variable.sf;
 	const tf = TYRANO.kag.variable.tf;
 	eval(pm.varname+'=newData');
 
-	console.log(pm.format+'＋'+pm.varname,TYRANO.kag.embScript(pm.varname));
+	//console.log(format+'：'+pm.varname,TYRANO.kag.embScript(pm.varname));
 
-}
-//ファイル呼び出し
-function getData2(pm){
-	$.ajax({
-		type: "GET",
-		url: "./data/others/plugin/csv_test/"+pm.file,
-		dataType: "text"
-	})
-	.done(function(data) {
-		const br = !pm.br ? '\n' : pm.br;  //改行
-		const split = pm.split ? pm.split : br;  //分割キー
+};
 
-		//フォーマット
-		const format = pm.format ? pm.format.replace(/array/i, "Array").replace(/object/i, "Object") : "ArrayA";
-
-		//データの下準備
-		data = data.replace(/\r\n|\n|\r/g, br);  //改行を置換
-		if(pm.split){
-			data = data.replace(new RegExp(","+pm.split+br,"g"), pm.split);  //分割キー前のコンマと後の改行はいらない
-			if(pm.br == "") data = data.replace(/\n/g, "");  //改行削除
-		}
-		data = data.split(split);   //分割して配列にする
-		data = $.grep(data, function(e){return e;});    //空行削除
-
-		//データを変換
-		const newData = mcfn['csv'+format](data);
-		//ティラノの変数に格納
-		const f = TYRANO.kag.stat.f;
-		const sf = TYRANO.kag.variable.sf;
-		const tf = TYRANO.kag.variable.tf;
-		eval(pm.varname+"=newData");
-
-		console.log(pm.format+"＋"+pm.varname,TYRANO.kag.embScript(pm.varname));
-
-	})
-	.fail(function(data) {
-		alert("ファイル 「 "+pm.file+" 」 がみつかりません。");
-	});
-}
-
-function csvjson(data){
-	alert("csvjson を実行しました。");
-}
 
 var mcfn = new Array();
 //配列
@@ -110,7 +73,7 @@ mcfn.csvArray = function(data){
 	let newArray = data.join(","); //配列を文字列に戻す
 	newArray = newArray.split(","); //再分割
 	return newArray;
-}
+};
 
 //配列-配列
 mcfn.csvArrayA = function(data){
@@ -120,7 +83,8 @@ mcfn.csvArrayA = function(data){
 		newArray.push(a_line);　//追加
 	}
 	return newArray;
-}
+};
+
 //配列-連想配列
 mcfn.csvArrayO = function(data){
 	let newArray = new Array();
@@ -134,7 +98,8 @@ mcfn.csvArrayO = function(data){
 		newArray.push(a_line);　//追加
 	}
 	return newArray;
-}
+};
+
 //連想配列 *key/value意外は無視
 mcfn.csvObject = function(data){
 	let newArray = new Object();
@@ -146,7 +111,8 @@ mcfn.csvObject = function(data){
 		newArray[csvArrayD[k]] = csvArrayD[v];
 	}
 	return newArray;
-}
+};
+
 //連想配列-配列
 mcfn.csvObjectA = function(data){
 	let newArray = new Object();
@@ -158,7 +124,7 @@ mcfn.csvObjectA = function(data){
 		newArray[csvArrayD[k]].splice( k , 1 );  //key分削除
 	}
 	return newArray;
-}
+};
 
 //連想配列-連想配列
 mcfn.csvObjectO = function(data){
@@ -173,4 +139,4 @@ mcfn.csvObjectO = function(data){
 		}
 	}
 	return newArray;
-}
+};
