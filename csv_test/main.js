@@ -7,31 +7,39 @@ function mcLoadcsv(pm) {
 	//分割コード split ※指定無ければ改行コードで分割
 	//改行を変換 br　※split指定しないと無意味
 
-	//ティラノ変数名チェック
-	if(pm.varname === undefined) alert("保存先の「ティラノスクリプト変数名」を指定してください。");
+	//変数に値がある場合は読込スキップを入れたい。
 
-	$.ajax({
-		type: "GET",
-		url: "./data/others/plugin/csv_test/"+pm.file,
-		dataType: "text"
-	})
-	.done(function(data) {
-		getData(data,pm);
-	})
-	.fail(function(data) {
-		alert("ファイル 「 "+pm.file+" 」 がみつかりません。");
-	});
+	//必須項目チェック
+	if(pm.file === undefined) alert("「file」に「csvファイル名」を指定してください。");
+	else if(pm.varname === undefined) alert("「varname」に「ティラノスクリプト変数名」を指定してください。");
 
-}
+	//varnameがあるかチェック ※上書きしたい場合は変数空欄にしてください。
+	if(!TYRANO.kag.embScript(pm.varname)){
+		$.ajax({
+			type: "GET",
+			url: "./data/others/plugin/csv_test/"+pm.file,
+			dataType: "text"
+		})
+		.done(function(data) {
+			getData(data,pm);
+		})
+		.fail(function(data) {
+			alert("ファイル 「 "+pm.file+" 」 がみつかりません。");
+		});
+	}else{
+		console.log("実行しません！！！");
+	}
+};
 
 function getData(data,pm){
+	pm.br = pm.br || "";
 	const br = !pm.br ? '\n' : pm.br;  //改行
 	const split = pm.split ? pm.split : br;  //分割キー
 	//フォーマット
 	const format = pm.format ? pm.format.replace(/array/i, 'Array').replace(/object/i, 'Object') : 'ArrayA';
 
 	//データの下準備
-	data = data.replace(/\r?\n/g, br).replace(/\\n/g,'&&&&&');  //改行を置換/改行記号を適当な文字列に置換
+	data = data.replace(/\r?\n/g, br).replace(/\\n/g,'&&&&&');  //改行を置換/改行記号を適当な文字列に置換 &&&&&使う人いたら困る。
 	data = data.replace(new RegExp('&&&&&'+br,'g'),'&&&&&');  //代替え文字列に隣接した改行を削除
 	if(pm.split){
 		data = data.replace(new RegExp(','+pm.split+br,'g'), pm.split);  //分割キー前のコンマと後の改行はいらない
@@ -50,7 +58,7 @@ function getData(data,pm){
 	const tf = TYRANO.kag.variable.tf;
 	eval(pm.varname+'=newData');
 
-	//console.log(pm.format+'＋'+pm.varname,TYRANO.kag.embScript(pm.varname));
+	console.log(pm.format+'＋'+pm.varname,TYRANO.kag.embScript(pm.varname));
 
 }
 //ファイル呼び出し
@@ -84,7 +92,7 @@ function getData2(pm){
 		const tf = TYRANO.kag.variable.tf;
 		eval(pm.varname+"=newData");
 
-		//console.log(pm.format+"＋"+pm.varname,TYRANO.kag.embScript(pm.varname));
+		console.log(pm.format+"＋"+pm.varname,TYRANO.kag.embScript(pm.varname));
 
 	})
 	.fail(function(data) {
