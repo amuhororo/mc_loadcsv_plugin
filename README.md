@@ -2,6 +2,7 @@
 
 csvファイルを任意のティラノ変数へ格納するプラグインです。  
 β版 2020/3/30  
+  
 
 ※β版の為、色々変更の可能性があります。  
 ※もし要望などあればおしらせください。  
@@ -9,48 +10,54 @@ csvファイルを任意のティラノ変数へ格納するプラグインで�
 ## 使い方
 1. `csv_test` フォルダを `data/other/pluin/` へ入れる
 2. first.ks 等でプラグインを読み込む。 `[plugin name="csv_test"]`
-3. `[mc_loadcsv]`タグでcsvファイルを読み込む。  `[mc_loadcsv file=sample.csv varname="tf.s.test" format=ObjectO split="_EOF" br=""]`
+3. `[mc_loadcsv]`タグでcsvファイルを読み込む。  
+`[mc_loadcsv file=sample.csv varname="tf.s.test" format=ObjectO split="_EOF" br=""]`
 
 ## パラメーター
 
-| 属性名 | 説明 |
-----|---- 
-| file |  csvファイル名 |
-| varname | 保存先変数名（f.hofe など） exp の方が解りやすいかな？ |
-| format | 配列パターン（array/arrayA/arrayO/object/objectA/objectO) |
-| split | 分割キー（文字列： \_eof など）　※指定が無ければ改行コードで分割 |
-| br | 改行コードを変換する（文字列：\<br\> など）　※split指定必須 |
+| 属性名 | 必須 | 説明 |
+----|----|----  
+| file | 〇 | csvファイル名 |
+| varname | 〇 | 保存先変数名（f.hofe など） exp の方が解りやすいかな？ |
+| format | × | 配列パターン（array/arrayA/arrayO/object/objectA/objectO) |
+| split | × | 分割キー（文字列： \_eof など）　※指定が無ければ改行コードで分割 |
+| br | × | 改行コードを変換する（文字列：\<br\> など）　※split指定必須 |
 
 ## format について
 ### array
 配列  
-行に関係なくだらだらと単純に配列にします。
+行に関係なくだらだらと単純に配列にします。  
 ```[A1,A2,A3,B1,B2,B3,C1,C2,C3,...]```
 
 ### arrayA
 配列-配列  
 行ごとに入れ子の配列になります。  
+※format を指定芝居場合はこの配列になります。  
 ```[[A1,B1,C1],[A2,B2,C3],...]```
 
 ### arrayO
 配列-連想配列  
-行ごとに、連想配列を入れて行きます。1行目がkeyになります（TIPプラグインと同じ）  
+行ごとに、連想配列を入れて行きます。  
+1行目がkeyになります（TIPプラグインと同じ）  
 ```[{A1:A2,B1:B2,C1:C2},{A1:A3,B1:B3,C1:C3},...]```
 
 ### object
 連想配列  
-1行目に key と value が必須になります。その他の項目は、あっても無視されます。  
+1行目に key と value が必須になります。  
+その他の項目は、あっても無視されます。  
 ```{A2:B2,A3:B3,A4:B4,...}```  
 ※A1=key、B1=value の場合
 
 ### objectA
 連想配列-配列  
-1行目に key 必須。これ、どやって使うのかわからんです・・・  
+1行目に key 必須です。  
 ```{A2:[B2,C2,D2....],A3:[B3,C3,D3,...],...}```  
-※A1=key の場合
+※A1=key の場合  
+これ、どやって使うのかわからんです・・・  
 
 ### objectO
 連想配列-連想配列  
+1行目に key 必須です。  
 ```{A2:{B1:B2,C1:C2,D1:D2,...},A3:{B1:B3,C1:C3,D1:D3,...},...}```  
 ※A1=key の場合
 
