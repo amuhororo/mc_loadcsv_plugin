@@ -1,6 +1,6 @@
 # ティラノスクリプト用「CSV読込プラグイン」
 
-csvファイルを任意のティラノ変数へ格納するプラグインです。
+csvファイルを任意のティラノ変数へ格納するプラグインです。  
 β版 2020/3/30  
 
 ※β版の為、色々変更の可能性があります。  
@@ -8,8 +8,8 @@ csvファイルを任意のティラノ変数へ格納するプラグインで�
 
 ## 使い方
 1. `csv_test` フォルダを `data/other/pluin/` へ入れる
-2. `[plugin name="csv_test"]`
-3. `[mc_loadcsv file=sample.csv varname="tf.s.test" overwrite=yes format=ObjectO split="_EOF" br=""]`
+2. first.ks 等でプラグインを読み込む。 `[plugin name="csv_test"]`
+3. `[mc_loadcsv]`タグでcsvファイルを読み込む。  `[mc_loadcsv file=sample.csv varname="tf.s.test" format=ObjectO split="_EOF" br=""]`
 
 ## パラメーター
 
@@ -25,6 +25,7 @@ csvファイルを任意のティラノ変数へ格納するプラグインで�
 ### array
 配列  
 行に関係なくだらだらと単純に配列にします。
+```[A1,A2,A3,B1,B2,B3,C1,C2,C3,...]```
 
 ### arrayA
 配列-配列  
