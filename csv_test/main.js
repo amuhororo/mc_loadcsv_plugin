@@ -65,6 +65,7 @@ function getData(data,pm){
 	const sf = TYRANO.kag.variable.sf;
 	const tf = TYRANO.kag.variable.tf;
 	eval(pm.varname+'=newData');
+	TYRANO.kag.saveSystemVariable();  //sf変数セーブ
 
 	//console.log(format+'：'+pm.varname,TYRANO.kag.embScript(pm.varname));
 
