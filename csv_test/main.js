@@ -7,13 +7,13 @@ function mcLoadcsv(pm) {
 	//分割コード split ※指定無ければ改行コードで分割
 	//改行を変換 br　※split指定しないと無意味
 
-	//変数に値がある場合は読込スキップを入れたい。
+	//変数に値がある場合は読込スキップを入れたい。※済
 
 	//必須項目チェック
 	if(pm.file === undefined) alert("「file」に「csvファイル名」を指定してください。");
 	else if(pm.varname === undefined) alert("「varname」に「ティラノスクリプト変数名」を指定してください。");
 
-	//ティラノ変数チェック ※上書きしたい場合は変数空欄にしてください。
+	//ティラノ変数チェック ※上書きしたい場合は変数を空欄にしてください。
 	if(!TYRANO.kag.embScript(pm.varname) || !TYRANO.kag.embScript(pm.varname).length){
 		$.ajax({
 			type: "GET",
@@ -33,25 +33,29 @@ function mcLoadcsv(pm) {
 
 //ファイル呼び出し
 function getData(data,pm){
-	pm.br = pm.br || "";
-	let br = !pm.br ? '\n' : pm.br;  //改行
-	const split = pm.split ? pm.split : br;  //分割キー
+	//pm.br = pm.br || '';
+	//let br = !pm.br ? '\n' : pm.br;  //改行
+	const split = pm.split ? pm.split : '\n';  //分割キー
 	const format = pm.format ? pm.format.toLowerCase().replace(/^a|a$/ig,'A').replace(/^o|o$/ig,'O') : 'ArrayA'; //フォーマット
-	const xbr = "_&&&_";  //改行代替え用
+	//const xbr = "_&&&_";  //改行代替え文字列
 	//console.log(format,pm.format);
 
 	//データの下準備
-	data = data.replace(/\r?\n/g, br).replace(/\\n/g,xbr);  //改行を置換/改行記号を適当な文字列に置換 &&&&&使う人いたら困る。
-	data = data.replace(new RegExp(xbr+br,'g'),xbr);  //代替え文字列に隣接した改行を削除
+	//data = data.replace(/\r?\n/g, br).replace(/\\n/g,xbr);  //改行を置換/改行記号を適当な文字列に置換 &&&&&使う人いたら困る。
+	//data = data.replace(new RegExp(xbr+br,'g'),xbr);  //代替え文字列に隣接した改行を削除
+	data = data.replace(/\r?\n/g,'\n').replace(/\\n\n/g,'\\n');  //改行を\nに統一
 	if(pm.split){
-		data = data.replace(new RegExp(','+pm.split+br,'g'), pm.split);  //分割キー前のコンマと後の改行はいらない
-		if(pm.br == '') data = data.replace(/\n/g, '');  //改行削除
+		data = data.replace(new RegExp(','+pm.split+'\n','g'), pm.split);  //分割キー前のコンマと後の改行はいらない
+		//if(pm.br == '') data = data.replace(/\n/g, '');  //改行削除
+		if(pm.br) data = data.replace(/\n/g, pm.br);  //改行置換
 	}
 	data = data.split(split);   //分割して配列にする
 	data = $.grep(data, function(e){return e;});    //空行削除
-	//改行の代替え記号を改行コードに戻す。他にやりようないのか・・・。
-	br = pm.split ? pm.br : "";
-	data = data.map(elem => elem.replace(new RegExp(xbr+br,'g'), '\n'));
+	//改行文字列を改行コードに戻す。
+	//br = pm.split ? pm.br : "";
+	//data = data.map(elem => elem.replace(new RegExp(xbr+br,'g'), '\n'));
+	data = data.map(elem => elem.replace(/\\n/g, '\n'));
+
 
 	//データを変換
 	const newData = mcfn['csv'+format](data);
