@@ -14,7 +14,7 @@ function mcLoadcsv(pm) {
 	else if(pm.varname === undefined) alert("「varname」に「ティラノスクリプト変数名」を指定してください。");
 
 	//ティラノ変数チェック ※上書きしたい場合は変数空欄にしてください。
-	if(!TYRANO.kag.embScript(pm.varname).length){
+	if(!TYRANO.kag.embScript(pm.varname) || !TYRANO.kag.embScript(pm.varname).length){
 		$.ajax({
 			type: "GET",
 			url: "./data/others/plugin/csv_test/"+pm.file,
