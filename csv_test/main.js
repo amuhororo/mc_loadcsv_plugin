@@ -47,28 +47,18 @@ function mcLoadcsv(pm) {
 
 //ファイル呼び出し
 function getData(data,pm){
-	//pm.br = pm.br || '';
-	//let br = !pm.br ? '\n' : pm.br;  //改行
-	const split = pm.split ? pm.split : '\n';  //分割キー
-	//const format = pm.format ? pm.format.toLowerCase().replace(/^a|a$/ig,'A').replace(/^o|o$/ig,'O') : 'ArrayA'; //フォーマット
-	//const xbr = "_&&&_";  //改行代替え文字列
-
+	const split = (!pm.split || pm.split == '\\n') ? '\n' : pm.split;  //分割キー
+	
 	//データの下準備
-	//data = data.replace(/\r?\n/g, br).replace(/\\n/g,xbr);  //改行を置換/改行記号を適当な文字列に置換 &&&&&使う人いたら困る。
-	//data = data.replace(new RegExp(xbr+br,'g'),xbr);  //代替え文字列に隣接した改行を削除
 	data = data.replace(/\r?\n/g,'\n').replace(/\\n\n/g,'\\n');  //改行を\nに統一
 	if(pm.split){
 		data = data.replace(new RegExp(','+pm.split+'\n','g'), pm.split);  //分割キー前のコンマと後の改行はいらない
 		//if(pm.br == '') data = data.replace(/\n/g, '');  //改行削除
 		if(pm.br) data = data.replace(/\n/g, pm.br);  //改行置換
 	}
-	data = data.split(split);   //分割して配列にする
-	data = $.grep(data, function(e){return e;});    //空行削除
-	//改行文字列を改行コードに戻す。
-	//br = pm.split ? pm.br : "";
-	//data = data.map(elem => elem.replace(new RegExp(xbr+br,'g'), '\n'));
-	data = data.map(elem => elem.replace(/\\n/g, '\n'));
-
+	data = data.split(split);                             //分割して配列にする
+	data = $.grep(data, function(e){return e;});          //空行削除
+	data = data.map(elem => elem.replace(/\\n/g, '\n'));  //改行文字列を改行コードに戻す。
 
 	//データを変換
 	const newData = mcfn['csv'+pm.format](data);
@@ -79,8 +69,6 @@ function getData(data,pm){
 	const tf = TYRANO.kag.variable.tf;
 	eval(pm.varname+'=newData');
 	TYRANO.kag.saveSystemVariable();  //sf変数セーブ
-
-	//console.log(pm.format+'：'+pm.varname,TYRANO.kag.embScript(pm.varname));
 
 };
 
