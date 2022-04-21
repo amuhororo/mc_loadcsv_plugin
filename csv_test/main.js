@@ -23,9 +23,10 @@ function mcLoadcsv(pm) {
 	let check = TYRANO.kag.embScript(pm.varname);
 	if($.isArray(check)) check = check.length;
 	if( !check ){
+		const file_url = $.isHTTP(pm.file) ? pm.file : "./data/others/plugin/csv_test/"+pm.file;
 		$.ajax({
 			type: "GET",
-			url: "./data/others/plugin/csv_test/"+pm.file,
+			url: file_url,
 			dataType: "text"
 		})
 		.done(function(data) {
