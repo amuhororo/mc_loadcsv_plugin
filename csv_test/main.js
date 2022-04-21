@@ -13,6 +13,12 @@ function mcLoadcsv(pm) {
 	if(pm.file === undefined) alert("「file」に「csvファイル名」を指定してください。");
 	else if(pm.varname === undefined) alert("「varname」に「ティラノスクリプト変数名」を指定してください。");
 
+	//フォーマットの初期値と大文字小文字調整
+	pm.format = pm.format || 'ArrayA';
+	if(pm.format.match(/arraya|arrayo|array|objecta|objecto|object/i) != null){
+		pm.format = pm.format.toLowerCase().replace(/^a|a$/gi,'A').replace(/^o|o$/gi,'O');
+	}
+	
 	//ティラノ変数チェック ※上書きしたい場合は変数を空欄にしてください。
 	let check = TYRANO.kag.embScript(pm.varname);
 	if($.isArray(check)) check = check.length;
@@ -23,7 +29,12 @@ function mcLoadcsv(pm) {
 			dataType: "text"
 		})
 		.done(function(data) {
-			getData(data,pm);
+			//関数チェック
+			if (typeof mcfn['csv'+pm.format] == 'function') {
+				getData(data,pm);
+			} else {
+				alert('フォーマット名 「 '+pm.format+' 」 がみつかりません。');
+			}
 		})
 		.fail(function(data) {
 			alert("ファイル 「 "+pm.file+" 」 がみつかりません。");
@@ -38,9 +49,8 @@ function getData(data,pm){
 	//pm.br = pm.br || '';
 	//let br = !pm.br ? '\n' : pm.br;  //改行
 	const split = pm.split ? pm.split : '\n';  //分割キー
-	const format = pm.format ? pm.format.toLowerCase().replace(/^a|a$/ig,'A').replace(/^o|o$/ig,'O') : 'ArrayA'; //フォーマット
+	//const format = pm.format ? pm.format.toLowerCase().replace(/^a|a$/ig,'A').replace(/^o|o$/ig,'O') : 'ArrayA'; //フォーマット
 	//const xbr = "_&&&_";  //改行代替え文字列
-	//console.log(format,pm.format);
 
 	//データの下準備
 	//data = data.replace(/\r?\n/g, br).replace(/\\n/g,xbr);  //改行を置換/改行記号を適当な文字列に置換 &&&&&使う人いたら困る。
@@ -60,7 +70,7 @@ function getData(data,pm){
 
 
 	//データを変換
-	const newData = mcfn['csv'+format](data);
+	const newData = mcfn['csv'+pm.format](data);
 
 	//ティラノの変数に格納
 	const f = TYRANO.kag.stat.f;
@@ -69,7 +79,7 @@ function getData(data,pm){
 	eval(pm.varname+'=newData');
 	TYRANO.kag.saveSystemVariable();  //sf変数セーブ
 
-	//console.log(format+'：'+pm.varname,TYRANO.kag.embScript(pm.varname));
+	//console.log(pm.format+'：'+pm.varname,TYRANO.kag.embScript(pm.varname));
 
 };
 
