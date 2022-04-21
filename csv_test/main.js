@@ -15,7 +15,7 @@ function mcLoadcsv(pm) {
 
 	//フォーマットの初期値と大文字小文字調整
 	pm.format = pm.format || 'ArrayA';
-	if(pm.format.match(/arraya|arrayo|array|objecta|objecto|object/i) != null){
+	if(pm.format.match(/^(arraya|arrayo|array|objecta|objecto|object)$/i) != null){
 		pm.format = pm.format.toLowerCase().replace(/^a|a$/gi,'A').replace(/^o|o$/gi,'O');
 	}
 	
