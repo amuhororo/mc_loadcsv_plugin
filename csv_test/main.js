@@ -69,6 +69,7 @@ function getData(data,pm){
 	const tf = TYRANO.kag.variable.tf;
 	eval(pm.varname+'=newData');
 	TYRANO.kag.saveSystemVariable();  //sf変数セーブ
+	if(TYRANO.kag.is_studio) TYRANO.kag.studio.notifyChangeVariable();  //ティラノスタジオ対応
 
 };
 
