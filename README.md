@@ -8,9 +8,10 @@ csvファイルを任意のティラノ変数へ格納するプラグインで�
 ※もし要望などあればIssues等ででもおしらせください。  
 
 ## 使い方
-1. `csv_test` フォルダを `data/other/pluin/` へ入れる
-2. first.ks 等でプラグインを読み込む。 `[plugin name="csv_test"]`
-3. `[mc_loadcsv]`タグでcsvファイルを読み込む。  
+1. `csv_test` フォルダを `data/other/pluin/` へ入れる。
+2. csvファイルは `data/other/pluin/csv_test/` へ入れる。
+3. first.ks 等でプラグインを読み込む。 `[plugin name="csv_test"]`
+4. `[mc_loadcsv]`タグでcsvファイルを読み込む。  
 `[mc_loadcsv file=sample.csv varname="tf.s.test" format=ObjectO split="_EOF" br=""]`
 
 ## パラメーター
@@ -27,6 +28,8 @@ csvファイルを任意のティラノ変数へ格納するプラグインで�
 配列内の値は、全て「文字列」になります。
 
 ## format について
+※プラグインで用意してあるパターンの場合は、大文字小文字は気にしなくても大丈夫です。
+※自分で用意した関数の場合は、大文字小文字は区別します。
 ### array
 配列  
 行に関係なくだらだらと単純に配列にします。  
