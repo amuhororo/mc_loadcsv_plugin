@@ -1,6 +1,4 @@
-;【CSV読込プラグイン】
-; v1.00 2022/5/8
-; by hororo https://memocho.no-tenki.me/
+;CSV読み込みプラグイン
 
 [loadjs storage="plugin/mc_loadcsv/mc_loadcsv.js"]
 
