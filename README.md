@@ -9,7 +9,7 @@
 ## 使い方
 
 1. 「mc_loadcsv」フォルダを、「data/other/plugin/」へ入れてください。
-2. CSV ファイルは、「data/other/plugin/mc_loadcsv/」へ保存してください。
+2. CSVファイルは、「data/other/plugin/mc_loadcsv/」へ保存してください。
 3. first.ks 等に下記コードを記述しプラグインを読み込みます。※パラメータはありません。
    ```
    [plugin name="mc_loadcsv"]
@@ -19,7 +19,14 @@
    [mc_loadcsv file=sample.csv var="f.test" format=ObjectO split="_EOF" br="<br>"]
    ```
 
-## パラメーター
+## 追加タグ
+
+**[mc_loadcsv]**
+
+CSVファイルを読み込む為のタグです。  
+※ [plugin]タグのみではCSVは読み込みません。
+
+### パラメーター
 
 | パラメータ名 | 必須 | 説明 | 初期値 |
 | ------------| :--: | ------- | :----: |
@@ -230,6 +237,7 @@ mc_loadcsv.hoge = function(data,oridata){
 ## 寄付のお願い
 
 お役に立てましたら寄付を頂けるととても嬉しいです。  
+開発費やサイト運営費などに充てさせて頂きます。  
 詳細はWEBサイトを参照してください。  
 https://memocho.no-tenki.me/terms#donation
 
